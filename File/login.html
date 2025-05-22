@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Poppins:wght@300;500&display=swap"
+    rel="stylesheet" />
+  <link rel="shortcut icon" href="image/logo.png" type="image/x-icon">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(to right, #dbeafe, #e0e7ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .register-box {
+      background: #fff;
+      width: 430px;
+      padding: 30px 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      position: relative;
+      border: 5px solid #c7d2fe;
+      background-image: url('https://www.transparenttextures.com/patterns/notebook.png');
+    }
+
+    .register-box::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      border-radius: 25px;
+      border: 2px dashed #a5b4fc;
+      z-index: -1;
+    }
+
+    .register-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #6366f1;
+      font-size: 2.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .form-group input {
+      width: 100%;
+      height: 50px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background-color: #f9fafb;
+      font-size: 14px;
+      padding-left: 12px;
+    }
+
+    .form-group input:focus {
+      border-color: #a5b4fc;
+      box-shadow: 0 0 5px #a5b4fc88;
+    }
+
+    .register-btn,
+    .login-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #818cf8;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .register-btn:hover,
+    .login-btn:hover {
+      background-color: #6366f1;
+      transform: scale(1.05);
+    }
+
+    .bottom-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .bottom-text a {
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .google {
+      width: 100%;
+      margin-top: 13px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 15.5px;
+    }
+
+    .google:hover {
+      background-color: #f3f4f6;
+    }
+
+    .google img {
+      width: 20px;
+    }
+
+    .doodle {
+      position: absolute;
+      width: 30px;
+      opacity: 0.2;
+    }
+
+    .star {
+      top: -10px;
+      left: -10px;
+    }
+
+    .heart {
+      bottom: -10px;
+      right: -10px;
+    }
+
+    .note {
+      bottom: -10px;
+      left: -10px;
+    }
+
+    #login-form,
+    #register-form {
+      display: none;
+    }
+
+    #register-form.active,
+    #login-form.active {
+      display: block;
+    }
+
+    /* Modal container (hidden by default) */
+    .modal {
+      display: none;
+      /* Hidden initially */
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      font-family: Arial, sans-serif;
+    }
+
+    /* Modal content box */
+    .modal-content {
+      background-color: white;
+      width: 300px;
+      margin: 15% auto;
+      border-radius: 12px;
+      text-align: center;
+      padding: 20px 30px 30px 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    /* Colored header bar */
+    .modal-header {
+      background-color: #8a98d6;
+      /* Same light blue-purple color */
+      height: 40px;
+      border-radius: 12px 12px 0 0;
+      margin: -20px -30px 20px -30px;
+    }
+
+    /* Message text */
+    #modalMessage {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    /* OK Button */
+    #modalOkBtn {
+      background-color: #8a98d6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 30px;
+      font-weight: 600;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease;
+    }
+
+    #modalOkBtn:hover {
+      background-color: #6f7bc3;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="register-box">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="doodle star" />
+    <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" class="doodle heart" />
+    <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" class="doodle note" />
+
+    <h2 id="form-title">Register</h2>
+
+    <div class="container">
+
+      <!-- Register Form -->
+      <form id="register-form" class="active">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="register-username" placeholder="Your name" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="register-email" placeholder="abc@gmail.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="register-password" placeholder="Password" required />
+        </div>
+        <button class="register-btn">Register</button>
+        <div class="google" id="google-btn">
+          <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="Google Icon" />
+          <span>Sign in with Google</span>
+        </div>
+      </form>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="abc@gmail.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="Password" required />
+        </div>
+        <button class="login-btn">Login</button>
+      </form>
+
+      <div class="bottom-text">
+        <span id="switch-text">Already have an account? <a id="switch-link">Login</a></span>
+      </div>
+      <!-- Custom Modal for Success Message -->
+      <div id="successModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header"></div>
+          <p id="modalMessage">Welcome! Registration successful</p>
+          <button id="modalOkBtn">OK</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAX9aRhKz1jHWM1-x51ea4kScYDcnm4kGg",
+      authDomain: "attendance-app-cef1b.firebaseapp.com",
+      projectId: "attendance-app-cef1b",
+      storageBucket: "attendance-app-cef1b.appspot.com",
+      messagingSenderId: "147547710052",
+      appId: "1:147547710052:web:5949a56add62ef6089f571",
+      measurementId: "G-ET4E6XQS5N"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+
+    const registerForm = document.getElementById("register-form");
+    const loginForm = document.getElementById("login-form");
+    const formTitle = document.getElementById("form-title");
+    const switchText = document.getElementById("switch-text");
+    const googleBtn = document.getElementById("google-btn");
+
+    // Register
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("register-username").value;
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const userId = userCred.user.uid;
+        await set(ref(db, 'users/' + userId), { username, email });
+        alert("Register Successful!");
+        window.location.href = "dashboard.html"; // Redirect here
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    // Login
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login Successful!");
+        window.location.href = "dashboard.html"; // Redirect here
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    // Google Sign-In
+    googleBtn.addEventListener("click", async () => {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        await set(ref(db, 'users/' + user.uid), {
+          username: user.displayName,
+          email: user.email
+        });
+        showSuccessModal("Google Sign In Successful!");
+        window.location.href = "dashboard.html"; // Redirect here
+      } catch (err) {
+        showSuccessModal("Google Sign In Successful!" + err.message);
+      }
+    });
+    function showSuccessModal(message) {
+      const modal = document.getElementById("successModal");
+      const modalMessage = document.getElementById("modalMessage");
+      modalMessage.textContent = message;
+      modal.style.display = "block";
+
+      const okBtn = document.getElementById("modalOkBtn");
+
+      // Clear any previous click handlers to avoid multiple triggers
+      okBtn.onclick = null;
+      window.onclick = null;
+
+      // Close modal on OK button click
+      okBtn.onclick = () => {
+        modal.style.display = "none";
+        clearTimeout(autoCloseTimeout);
+      };
+
+      // Close modal if clicking outside content
+      window.onclick = (event) => {
+        if (event.target === modal) {
+          modal.style.display = "none";
+          clearTimeout(autoCloseTimeout);
+        }
+      };
+
+      // Automatically close modal after 10 seconds (10000ms)
+      const autoCloseTimeout = setTimeout(() => {
+        modal.style.display = "none";
+      }, 10000);
+    }
+
+
+
+    // Form toggle logic
+    function toggleForms() {
+      const isRegister = registerForm.classList.contains("active");
+      if (isRegister) {
+        registerForm.classList.remove("active");
+        loginForm.classList.add("active");
+        formTitle.textContent = "Login";
+        switchText.innerHTML = `Don't have an account? <a id="switch-link">Register</a>`;
+      } else {
+        loginForm.classList.remove("active");
+        registerForm.classList.add("active");
+        formTitle.textContent = "Register";
+        switchText.innerHTML = `Already have an account? <a id="switch-link">Login</a>`;
+      }
+
+      // Reattach toggle listener
+      document.getElementById("switch-link").addEventListener("click", toggleForms);
+    }
+
+    // Setup initial toggle event
+    document.getElementById("switch-link").addEventListener("click", toggleForms);
+  </script>
+
+
+</body>
+
+</html>

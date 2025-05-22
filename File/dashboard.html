@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="shortcut icon" href="image/logo.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Josefin+Sans:ital,wght@1,100..700&family=Jost:ital,wght@0,100..900;1,100..900&family=Just+Another+Hand&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Rowdies:wght@300;400;700&family=Tulpen+One&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+      display: flex;
+      list-style: none;
+    }
+
+    .sidebar {
+      width: 18%;
+      background: #cecaff;
+      padding: 25px;
+      color: white;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+
+    .sidebar h2 {
+      color: #172d55;
+    }
+
+    .main {
+      flex: 1;
+      padding: 40px;
+      width: 82%;
+    }
+
+    .dashboard {
+      width: 100%;
+      display: flex;
+      gap: 20px;
+    }
+
+    .card {
+      width: 28%;
+      height: 140px;
+      display: flex;
+      background: #e3f8ff;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 21px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .card.present {
+      background: #ffe2e2;
+    }
+
+    .card.absent {
+      background: #fff4bc;
+    }
+
+    .value {
+      font-size: 32px;
+      margin-top: 10px;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-y: auto;
+      width: 35%;
+    }
+
+    #studentList {
+      text-transform: capitalize;
+      padding: 20px;
+    }
+
+    #studentList li {
+      list-style: auto;
+      line-height: 30px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .navi li {
+      list-style: none;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 20px;
+    }
+
+    .navi a {
+      text-decoration: none;
+      color: black;
+    }
+
+    .navi {
+      display: flex;
+      flex-direction: column;
+      /* gap: 45px; */
+    }
+
+    .logo {
+      font-family: "Tulpen One", sans-serif;
+      font-size: 40px;
+      letter-spacing: 5px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .navbar li {
+      width: 100%;
+      padding: 13px;
+      margin: 10px 0;
+      background-color: #b7b7f5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 17px;
+      letter-spacing: 0.5px;
+    }
+
+    .main {
+      width: 82%;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .info {
+      font-size: 17px;
+    }
+
+    .para {
+      width: 43%;
+      height: 200px;
+      background: #FAE3DC;
+      color: #222;
+      padding: 20px 25px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 30px;
+      font-family: 'Jost', sans-serif;
+      box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+
+    }
+
+    .container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .para a {
+      width: 25%;
+      font-size: 15px;
+      height: 35px;
+      background: #D7BFFF;
+      text-decoration: none;
+      color: black;
+      text-align: center;
+      line-height: 33px;
+    }
+
+    .para p {
+      font-size: 17px;
+      line-height: 26px;
+    }
+
+    /* .dashboard {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      gap: 30px;
+      user-select: none;
+    } */
+
+    .calendar-container {
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #dfdbdb;
+      padding: 20px 0px;
+      border-radius: 20px;
+    }
+
+    .month-nav {
+      width: 50%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      color: #007a5e;
+    }
+
+    .month-nav button {
+      background: #172d55;
+      color: white;
+      border: none;
+      font-size: 20px;
+      font-weight: 700;
+      width: 35px;
+      height: 35px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .month-nav button:hover {
+      background: #172d55;
+      color: white;
+    }
+
+    .month {
+      background: white;
+      padding: 15px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      width: 100%;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .weekdays div {
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 18px 7px;
+      width: 100%;
+      justify-items: center;
+    }
+
+    .day {
+      padding: 8px 0;
+      width: 60%;
+      text-align: center;
+      font-weight: 600;
+      color: #172d55;
+      background: white;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      box-shadow: 0 0 3px #00c89626;
+    }
+
+    .day:hover {
+      background-color: #172d55;
+      color: white;
+    }
+
+    .day.inactive {
+      background: transparent;
+      color: #bbb;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .day.selected {
+      background-color: #172d55;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 0 8px #172d55;
+    }
+
+    .chart-container {
+      width: 35%;
+      border-radius: 21px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: white;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .dash {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .donut {
+      width: 250px;
+    }
+
+    div#monthYearLabel {
+      color: #172d55;
+    }
+
+    .whole {
+      width: 100%;
+      display: flex;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="whole">
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Attendo</h2>
+      </div>
+      <div class="navbar">
+        <ul class="navi">
+          <li><i class="fas fa-chart-pie"></i><a href='dashboard.html'>Dashboard</a></li>
+          <li><i class="fas fa-calendar-check"></i><a href='attendancesheet.html'>Attendance</a></li>
+          <li><i class="fa-solid fa-users"></i></i><a href='student.html'>Students</a></li>
+          <li><i class="fas fa-chart-bar"></i><a href='report.html'>Reports</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main">
+      <h1>Dashboard</h1>
+      <div class="info">
+        <strong>Date:</strong> <span id="date"></span> |
+        <strong>Day:</strong> <span id="day"></span>
+      </div>
+      <div class="dashboard">
+        <div class="card" id="totalStudentsCard">
+          Total Students
+          <div class="value" id="totalStudents">0</div>
+        </div>
+        <div class="card present" id="presentCard">
+          Today's Present
+          <div class="value" id="presentToday">0</div>
+        </div>
+        <div class="card absent" id="absentCard">
+          Today's Absent
+          <div class="value" id="absentToday">0</div>
+        </div>
+      </div>
+      <div class="dash">
+        <div class="calendar-container">
+          <div class="month-nav">
+            <button id="prevMonthBtn">&lt;</button>
+            <div id="monthYearLabel"></div>
+            <button id="nextMonthBtn">&gt;</button>
+          </div>
+          <div class="month" id="monthCalendar"></div>
+        </div>
+
+        <div class="chart-container">
+          <div class="attend">
+            <h3>Attendance</h3>
+          </div>
+          <div class="donut"><canvas id="donutChart"></canvas></div>
+          <div class="text">
+            <p id="summaryText"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="studentModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Student List</h2>
+      <ul id="studentList"></ul>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    window.onload = function () {
+      const firebaseConfig = {
+        apiKey: "AIzaSyAX9aRhKz1jHWM1-x51ea4kScYDcnm4kGg",
+        authDomain: "attendance-app-cef1b.firebaseapp.com",
+        databaseURL: "https://attendance-app-cef1b-default-rtdb.firebaseio.com",
+        projectId: "attendance-app-cef1b",
+        storageBucket: "attendance-app-cef1b.appspot.com",
+        messagingSenderId: "147547710052",
+        appId: "1:147547710052:web:5949a56add62ef6089f571"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+
+      // DOM references
+      const totalEl = document.getElementById("totalStudents");
+      const presentEl = document.getElementById("presentToday");
+      const absentEl = document.getElementById("absentToday");
+      const studentModal = document.getElementById("studentModal");
+      const studentListEl = document.getElementById("studentList");
+      const monthCalendar = document.getElementById('monthCalendar');
+      const monthYearLabel = document.getElementById('monthYearLabel');
+      const prevMonthBtn = document.getElementById('prevMonthBtn');
+      const nextMonthBtn = document.getElementById('nextMonthBtn');
+      const closeModal = document.getElementsByClassName("close")[0];
+      const summaryText = document.getElementById("summaryText");
+      const donutCtx = document.getElementById('donutChart').getContext('2d');
+      const centerTextPlugin = {
+        id: 'centerTextPlugin',
+        beforeDraw(chart) {
+          const { ctx, width, height } = chart;
+          ctx.save();
+          ctx.font = 'bold 28px Arial';
+          ctx.fillStyle = '#444';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          const data = chart.data.datasets[0].data;
+          const total = data.reduce((a, b) => a + b, 0);
+          const present = data[0];
+          const percent = total ? Math.round((present / total) * 100) : 0;
+
+          ctx.fillText(percent + '%', width / 2, height / 2);
+          ctx.restore();
+        }
+      };
+
+      let donutChart = new Chart(donutCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Present', 'Absent'],
+          datasets: [{
+            data: [0, 0],
+            backgroundColor: ['#a7f3d0', '#fecaca'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          cutout: '75%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom'
+            }
+          }
+        },
+        plugins: [centerTextPlugin]
+      });
+
+      const now = new Date();
+      document.getElementById("date").textContent = now.toISOString().split("T")[0];
+      document.getElementById("day").textContent = now.toLocaleDateString("en-US", { weekday: "long" });
+
+      // Calendar setup
+      let currentYear = now.getFullYear();
+      let currentMonth = now.getMonth();
+      let selectedDate = now.toISOString().split('T')[0];
+
+      function buildMonthCalendar(year, month) {
+        monthCalendar.innerHTML = '';
+        const monthName = new Date(year, month).toLocaleString('default', { month: 'long' });
+        monthYearLabel.textContent = `${monthName} ${year}`;
+
+        const weekdaysDiv = document.createElement('div');
+        weekdaysDiv.classList.add('weekdays');
+        ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(dayName => {
+          const wd = document.createElement('div');
+          wd.textContent = dayName;
+          weekdaysDiv.appendChild(wd);
+        });
+        monthCalendar.appendChild(weekdaysDiv);
+
+        const daysDiv = document.createElement('div');
+        daysDiv.classList.add('days');
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const firstDayIndex = firstDay.getDay();
+        const daysInMonth = lastDay.getDate();
+
+        for (let i = 0; i < firstDayIndex; i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.classList.add('day', 'inactive');
+          daysDiv.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayCell = document.createElement('div');
+          dayCell.classList.add('day');
+          dayCell.textContent = day;
+
+          const dayString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+          dayCell.addEventListener('click', () => {
+            if (selectedDate === dayString) return;
+            selectedDate = dayString;
+            updateSelectedDay();
+            loadAttendanceForDate(selectedDate);
+          });
+
+          daysDiv.appendChild(dayCell);
+        }
+
+        monthCalendar.appendChild(daysDiv);
+        updateSelectedDay();
+      }
+
+      function updateSelectedDay() {
+        [...monthCalendar.querySelectorAll('.day')].forEach(dayCell => {
+          dayCell.classList.remove('selected');
+          const dayNum = dayCell.textContent.padStart(2, '0');
+          const fullDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${dayNum}`;
+          if (fullDate === selectedDate) {
+            dayCell.classList.add('selected');
+          }
+        });
+      }
+
+      async function loadAttendanceForDate(date) {
+        let presentCount = 0;
+        let absentCount = 0;
+        let totalStudents = [];
+        let presentStudents = [];
+        let absentStudents = [];
+
+        const snapshot = await db.ref('students').once('value');
+        const students = snapshot.val();
+
+        for (let id in students) {
+          const student = students[id];
+          const status = student.attendance?.[date];
+          totalStudents.push(student.name);
+
+          if (status === 'Present') {
+            presentCount++;
+            presentStudents.push(student.name);
+          } else if (status === 'Absent') {
+            absentCount++;
+            absentStudents.push(student.name);
+          }
+        }
+
+        donutChart.data.datasets[0].data = [presentCount, absentCount];
+        donutChart.update();
+
+        summaryText.innerText = `Present: ${presentCount} | Absent: ${absentCount}`;
+
+        totalEl.innerText = totalStudents.length;
+        presentEl.innerText = presentCount;
+        absentEl.innerText = absentCount;
+
+        document.getElementById('totalStudentsCard').onclick = () => showStudentList("Total Students", totalStudents);
+        document.getElementById('presentCard').onclick = () => showStudentList("Present Students", presentStudents);
+        document.getElementById('absentCard').onclick = () => showStudentList("Absent Students", absentStudents);
+      }
+
+      function showStudentList(students) {
+        studentListEl.innerHTML = students.map(name => `<li>${name}</li>`).join('');
+        studentModal.style.display = "flex";
+      }
+
+      closeModal.onclick = () => {
+        studentModal.style.display = "none";
+      };
+
+      window.onclick = function (event) {
+        if (event.target === studentModal) {
+          studentModal.style.display = "none";
+        }
+      };
+
+      prevMonthBtn.onclick = () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        buildMonthCalendar(currentYear, currentMonth);
+        selectedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`;
+        loadAttendanceForDate(selectedDate);
+      };
+
+      nextMonthBtn.onclick = () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        buildMonthCalendar(currentYear, currentMonth);
+        selectedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`;
+        loadAttendanceForDate(selectedDate);
+      };
+
+      // Initial load
+      buildMonthCalendar(currentYear, currentMonth);
+      loadAttendanceForDate(selectedDate);
+    };
+  </script>
+
+</body>
+
+</html>
